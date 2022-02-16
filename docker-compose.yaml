@@ -51,7 +51,7 @@ services:
     ports:
       - "9121:9121"
     environment:
-      - REDIS_ADDR=http://localhost:6379
+      - REDIS_ADDR=redis:6379
   alertmanager:
     image: quay.io/prometheus/alertmanager
     container_name: alertmanager
