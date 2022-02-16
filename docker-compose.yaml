@@ -1,0 +1,44 @@
+version: "3.7"
+services:
+  netdata:
+    image: netdata/netdata
+    container_name: netdata
+    deploy:
+      restart_policy:
+        condition: on-failure
+    cap_add:
+      - "SYS_PTRACE"
+    security_opt:
+      - "apparmor:unconfined"
+    ports:
+      - "19999:19999"
+    volumes:
+      # - /etc/netdataconfig:/etc/netdata
+      # - /var/lib/netdatalib:/var/lib/netdata
+      # - /var/cache/netdatacache:/var/cache/netdata
+      - /etc/passwd:/host/etc/passwd:ro
+      - /etc/group:/host/etc/group:ro
+      - /proc:/host/proc:ro
+      - /sys:/host/sys:ro
+      - /etc/os-release:/host/etc/os-release:ro
+  minio:
+    image: quay.io/minio/minio
+    command: server /data --console-address ":9001"
+    container_name: minio
+    deploy:
+      restart_policy:
+        condition: on-failure
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - /var/lib/minio/data:/data
+      - /minio/v2/metrics/cluster:/minio/v2/metrics/cluster
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=adminadmin
+      - MINIO_PROMETHEUS_AUTH_TYPE=public
+    
+
+
+

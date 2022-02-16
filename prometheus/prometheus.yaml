@@ -1,0 +1,35 @@
+global:
+  external_labels:
+    cluster: eu1
+  scrape_interval:   15s
+  
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+        labels:
+          instance: 'prometheus'
+
+  - job_name: 'netdata'
+    metrics_path: '/api/v1/allmetrics'
+    params:
+      format: [prometheus]
+    honor_labels: true
+    static_configs:
+      - targets: ['localhost:19999']
+        labels:
+          instance: 'netdata'
+ 
+  - job_name: 'node_exporter'
+    static_configs:
+      - targets: ['localhost:9100']
+        labels:
+          instance: 'node_exporter'
+
+  - job_name: 'minio'
+    metrics_path: /minio/v2/metrics/cluster
+    scheme: http
+    static_configs:
+      - targets: ['localhost:9000']
+        labels:
+          instance: 'minio'
