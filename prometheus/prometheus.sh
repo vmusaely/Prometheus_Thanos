@@ -18,6 +18,7 @@ mv prometheus-2.33.3.linux-amd64/console_libraries /etc/prometheus
 rm -rf prometheus-2.33.3.linux-amd64.tar.gz prometheus-2.33.3.linux-amd64
 
 cp prometheus.yaml /etc/prometheus/prometheus.yaml
+cp -R alertmanager /etc/prometheus/
 chown -R prometheus:prometheus /var/lib/prometheus
 chown -R prometheus:prometheus /etc/prometheus
 
@@ -46,3 +47,4 @@ WantedBy=multi-user.target
 EOF
 
 systemctl daemon-reload
+systemctl start prometheus

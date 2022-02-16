@@ -1,0 +1,19 @@
+auth_enabled: false
+target: query-frontend
+http_prefix:
+server:
+  http_listen_port: 9091
+query_range:
+  split_queries_by_interval: 24h
+  align_queries_with_step: true
+  cache_results: true
+  results_cache:
+    cache:
+      redis:
+        endpoint: "localhost:6379"
+        db: 1
+        password: ""
+        timeout: 3s
+frontend:
+  log_queries_longer_than: 1s
+  downstream_url: http://localhost:19192
