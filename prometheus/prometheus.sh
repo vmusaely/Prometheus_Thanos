@@ -1,8 +1,15 @@
 #!/bin/bash
-
+user=prometheus
 url=https://github.com/prometheus/prometheus/releases/download/v2.33.3/prometheus-2.33.3.linux-amd64.tar.gz
 
-useradd --no-create-home --shell /bin/false prometheus
+id -u ${user} &> /dev/null
+if [ $? -eq 0 ]
+then
+	echo The ${user} user already exist;
+else
+    useradd --no-create-home --shell /bin/false prometheus
+    echo The ${prometheus} user has been created.
+fi
 
 wget ${url}
 tar -xf prometheus-2.33.3.linux-amd64.tar.gz
@@ -17,9 +24,9 @@ mv prometheus-2.33.3.linux-amd64/console_libraries /etc/prometheus
 
 rm -rf prometheus-2.33.3.linux-amd64.tar.gz prometheus-2.33.3.linux-amd64
 
-cp prometheus.yaml /etc/prometheus/prometheus.yaml
+cp prometheus.yml /etc/prometheus/prometheus.yml
 cp -R alertmanager /etc/prometheus/
-cp rules.yaml /etc/prometheus/
+cp rules.yml /etc/prometheus/
 chown -R prometheus:prometheus /var/lib/prometheus
 chown -R prometheus:prometheus /etc/prometheus
 
@@ -34,7 +41,7 @@ User=prometheus
 Group=prometheus
 Type=simple
 ExecStart=/usr/local/bin/prometheus \
-    --config.file=/etc/prometheus/prometheus.yaml \
+    --config.file=/etc/prometheus/prometheus.yml \
     --web.enable-lifecycle \
     --storage.tsdb.retention.time=6h \
     --storage.tsdb.max-block-duration=2h \

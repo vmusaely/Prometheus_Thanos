@@ -2,6 +2,7 @@ version: "3.7"
 services:
   netdata:
     image: netdata/netdata
+    network_mode: host
     container_name: netdata
     deploy:
       restart_policy:

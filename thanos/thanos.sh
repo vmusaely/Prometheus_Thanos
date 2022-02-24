@@ -8,7 +8,7 @@ wget ${url}
 tar -xf thanos-0.24.0.linux-amd64.tar.gz
 mv thanos-0.24.0.linux-amd64/thanos /usr/local/bin
 mkdir -p /etc/thanos/
-cp bucket.yaml /etc/thanos/
+cp bucket.yml /etc/thanos/
 chown -R thanos:thanos /etc/thanos/
 chown thanos:thanos /usr/local/bin/thanos
 
@@ -27,7 +27,7 @@ ExecStart=/usr/local/bin/thanos sidecar \
     --http-address="0.0.0.0:19191" \
     --tsdb.path /var/lib/prometheus \
     --prometheus.url "http://localhost:9090" \
-    --objstore.config-file  "/etc/thanos/bucket.yaml"
+    --objstore.config-file  "/etc/thanos/bucket.yml"
 
 [Install]
 WantedBy=multi-user.target
@@ -45,7 +45,7 @@ ExecStart=/usr/local/bin/thanos store \
     --grpc-address="0.0.0.0:19091" \
     --http-address="0.0.0.0:19100" \
     --data-dir        "/local/state/data/dir" \
-    --objstore.config-file "/etc/thanos/bucket.yaml"
+    --objstore.config-file "/etc/thanos/bucket.yml"
 
 [Install]
 WantedBy=multi-user.target

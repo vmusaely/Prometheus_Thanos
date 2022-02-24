@@ -10,7 +10,7 @@ mv cortex-linux-amd64 /usr/local/bin/cortex
 chmod +x /usr/local/bin/cortex
 chown cortex:cortex /usr/local/bin/cortex
 mkdir -p /etc/cortex/
-cp cortex-frontend.yaml /etc/cortex/
+cp cortex-frontend.yml /etc/cortex/
 chown -R cortex:cortex /etc/cortex/
 
 tee /etc/systemd/system/cortex.service <<"EOF"
@@ -21,7 +21,7 @@ Description=Cortex
 User=root
 Group=root
 ExecStart=/usr/local/bin/cortex \
-    --config.file=/etc/cortex/cortex-frontend.yaml
+    --config.file=/etc/cortex/cortex-frontend.yml
 [Install]
 WantedBy=multi-user.target
 EOF

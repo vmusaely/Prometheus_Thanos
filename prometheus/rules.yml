@@ -1,0 +1,47 @@
+groups:
+- name: AllInstances
+  rules:
+  - alert: Redis is down
+    expr: redis_up == 0
+    for: 0m
+    labels:
+      customer: '{{ $labels.instance }}'
+      environment: databases
+      owner: ops
+      severity: critical
+    annotations:
+      description: Redis Server {{ $labels.instance }} is down
+      troubleshooting: Inform database administrators ASAP.
+  - alert: Redis has been restarted
+    expr: redis_uptime_in_seconds < 40
+    for: 0m
+    labels:
+      customer: '{{ $labels.instance }}'
+      environment: databases
+      owner: ops
+      severity: warning
+    annotations:
+      description: Redis Server {{ $labels.instance }} has been restarted
+      troubleshooting: Inform database administrators ASAP.
+  - alert: Minio storage
+    expr: minio_node_disk_free_bytes / 1024 / 1024 < 50000
+    for: 1m
+    labels:
+      customer: '{{ $labels.instance }}'
+      environment: databases
+      owner: ops
+      severity: warning
+    annotations:
+      description: The Minio storage {{ $labels.instance }} has less than 5Gb free space
+      troubleshooting: Inform database administrators ASAP.
+  - alert: Host memory usage
+    expr: sum(rate(netdata_system_ram_MiB_average{dimension!="free"}[20m]))
+    for: 1m
+    labels:
+      customer: '{{ $labels.instance }}'
+      environment: host
+      owner: ops
+      severity: warning
+    annotations:
+      description: The host memory usage is grater than 100 Mb in last 20 minutes
+      troubleshooting: Restart the host
